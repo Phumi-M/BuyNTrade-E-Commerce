@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['buyntrade-e-commerce-production.up.railway.app', 'localhost', '127.0.0.1']
 
+CSRF_TRUSTED_ORIGINS = ['https://buyntrade-e-commerce-production.up.railway.app']
+
 
 # Application definition
 
