@@ -1,0 +1,22 @@
+{% extends "buyntrade/layout.html" %}
+
+{% block title %}Shop by Category — {{ site_name }}{% endblock %}
+
+{% block body %}
+<div class="panel">
+  <h1 class="page-heading">Shop by Category</h1>
+  <p class="page-lead">Browse items grouped by category, or return to the <a href="{% url 'index' %}">shop</a>.</p>
+
+  {% if categories %}
+    <ul class="category-list">
+      {% for category in categories %}
+        <li>
+          <a href="{% url 'category_listings' category.id %}">{{ category.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty-state">No categories available yet.</div>
+  {% endif %}
+</div>
+{% endblock %}

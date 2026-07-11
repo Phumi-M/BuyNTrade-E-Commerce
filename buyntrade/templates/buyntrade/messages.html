@@ -1,0 +1,44 @@
+{% extends "buyntrade/layout.html" %}
+
+{% block title %}Messages — {{ site_name }}{% endblock %}
+
+{% block body %}
+<div class="shop-layout">
+  {% include "buyntrade/_shop_sidebar.html" %}
+
+  <section class="shop-main">
+    <div class="shop-toolbar">
+      <div>
+        <h1 class="shop-title">Messages</h1>
+        <p class="page-lead">Private conversations about your listings</p>
+      </div>
+    </div>
+
+    {% if message_threads %}
+      <ul class="inbox-list">
+        {% for thread in message_threads %}
+          {% with latest=thread.latest_message %}
+          <li class="inbox-item">
+            <a href="{% url 'message_thread' thread.listing.id thread.other_user.username %}" class="inbox-link">
+              <div class="inbox-top">
+                <strong>{{ thread.other_user.username }}</strong>
+                <span class="inbox-time">{{ latest.created_at|timesince }} ago</span>
+              </div>
+              <p class="inbox-listing">Re: {{ thread.listing.title }}</p>
+              <p class="inbox-preview">
+                {% if latest.sender == user %}You: {% endif %}{{ latest.text|truncatechars:120 }}
+              </p>
+            </a>
+          </li>
+          {% endwith %}
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="empty-state">
+        <p>No messages yet.</p>
+        <p class="page-lead">Message a seller from any listing page to start a conversation.</p>
+      </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

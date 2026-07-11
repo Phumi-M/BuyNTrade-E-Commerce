@@ -1,0 +1,95 @@
+{% extends "buyntrade/layout.html" %}
+{% load static %}
+
+{% block title %}Edit Listing — {{ site_name }}{% endblock %}
+
+{% block body %}
+<div class="panel panel-wide">
+  <h1 class="page-heading">Edit Listing</h1>
+  <p class="page-lead">Update details for <strong>{{ listing.title }}</strong></p>
+
+  {% if errors %}
+    <div class="alert alert-error">
+      {% for error in errors %}
+        <p>{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form action="{% url 'edit_listing' listing.id %}" method="post" enctype="multipart/form-data" class="form-stack">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input class="form-control" type="text" name="title" id="title" required value="{{ form_data.title|default:listing.title }}">
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea class="form-control" name="description" id="description" required>{{ form_data.description|default:listing.description }}</textarea>
+    </div>
+    <div class="form-group">
+      <label for="brand">Brand (optional)</label>
+      <input class="form-control" type="text" name="brand" id="brand" placeholder="e.g. Samsung, Nike" value="{{ form_data.brand|default:listing.brand }}">
+    </div>
+    <div class="form-group">
+      <label for="area">City / Area</label>
+      <input class="form-control" type="text" name="area" id="area" list="popular-areas" required value="{{ form_data.area|default:listing.area }}">
+      <datalist id="popular-areas">
+        {% for area in popular_areas %}
+          <option value="{{ area }}"></option>
+        {% endfor %}
+      </datalist>
+    </div>
+    {% if can_edit_price %}
+    <div class="form-group">
+      <label for="starting_bid">Starting Bid</label>
+      <input class="form-control" type="number" name="starting_bid" id="starting_bid" step="1" min="1" required value="{{ form_data.starting_bid|default:listing.starting_bid }}">
+      <p class="form-hint">You can change the starting bid because no bids have been placed yet.</p>
+    </div>
+    {% else %}
+    <div class="form-group">
+      <label>Current Price</label>
+      <p class="page-lead">
+        R{% if highest_bid %}{{ highest_bid.amount }}{% else %}{{ listing.starting_bid }}{% endif %},00
+        {% if highest_bid %} (highest bid){% else %} (starting bid){% endif %}
+      </p>
+    </div>
+    {% endif %}
+    <div class="form-group">
+      <label for="category">Category (optional)</label>
+      <select class="form-control" name="category" id="category">
+        <option value="">Select category</option>
+        {% for category in categories %}
+          <option value="{{ category.id }}"{% if listing.category_id == category.id %} selected{% endif %}>{{ category.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Current Photos</label>
+      {% if gallery_images %}
+        <div class="gallery-edit-grid">
+          {% for photo in gallery_images %}
+            <label class="gallery-edit-item">
+              <img src="{{ photo.image.url }}" alt="Listing photo {{ forloop.counter }}">
+              <span class="gallery-edit-remove">
+                <input type="checkbox" name="delete_images" value="{{ photo.id }}">
+                Remove
+              </span>
+            </label>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="form-hint">No gallery photos yet.</p>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      <label for="images">Add Photos</label>
+      <input class="form-control" type="file" name="images" id="images" accept="image/*" multiple>
+      <p class="form-hint">Add up to 8 photos total (max 5 MB each).</p>
+    </div>
+    <div class="form-actions-row">
+      <button class="btn btn-primary" type="submit">Save Changes</button>
+      <a class="btn btn-secondary" href="{% url 'my_listings' %}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

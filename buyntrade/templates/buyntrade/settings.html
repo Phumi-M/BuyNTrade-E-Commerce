@@ -1,0 +1,82 @@
+{% extends "buyntrade/layout.html" %}
+
+{% block title %}Settings — {{ site_name }}{% endblock %}
+
+{% block body %}
+<div class="shop-layout">
+  {% include "buyntrade/_shop_sidebar.html" %}
+
+  <section class="shop-main">
+    <div class="shop-toolbar">
+      <h1 class="shop-title">Settings</h1>
+    </div>
+
+    {% if errors %}
+      <div class="alert alert-error">
+        {% for error in errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="panel panel-wide">
+      <h2 class="section-title">Seller Profile</h2>
+      <p class="page-lead">This information appears on your public seller profile.</p>
+      <form method="post" enctype="multipart/form-data" class="form-stack">
+        {% csrf_token %}
+        <div class="seller-settings-photo">
+          {% if user.get_profile_photo_url %}
+            <img class="seller-profile-photo" src="{{ user.get_profile_photo_url }}" alt="Your profile photo">
+          {% else %}
+            <span class="seller-avatar seller-avatar-lg">{{ user.profile_initial }}</span>
+          {% endif %}
+          <div class="form-group">
+            <label for="profile_photo">Profile Photo</label>
+            <input class="form-control" type="file" name="profile_photo" id="profile_photo" accept="image/*">
+            <p class="form-hint">JPG, PNG, or WebP up to 2 MB.</p>
+            {% if user.get_profile_photo_url %}
+              <label class="check-row">
+                <input type="checkbox" name="remove_photo">
+                <span>Remove current photo</span>
+              </label>
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="bio">Bio</label>
+          <textarea class="form-control" name="bio" id="bio" rows="4" maxlength="500" placeholder="Tell buyers about yourself, your area, and what you sell...">{{ user.bio }}</textarea>
+          <p class="form-hint">Up to 500 characters.</p>
+        </div>
+        <div class="form-actions-row">
+          <button class="btn btn-primary" type="submit">Save Profile</button>
+          <a class="btn btn-secondary" href="{% url 'seller_profile' user.username %}">View Public Profile</a>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel panel-wide">
+      <h2 class="section-title">Account</h2>
+      <div class="settings-list">
+        <div class="settings-row">
+          <span class="settings-label">Username</span>
+          <span class="settings-value">{{ user.username }}</span>
+        </div>
+        <div class="settings-row">
+          <span class="settings-label">Email</span>
+          <span class="settings-value">{{ user.email|default:"Not set" }}</span>
+        </div>
+        <div class="settings-row">
+          <span class="settings-label">Member since</span>
+          <span class="settings-value">{{ user.date_joined|date:"F j, Y" }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-wide dashboard-panel">
+      <h2 class="section-title">Preferences</h2>
+      <p class="page-lead">Use the sun/moon button in the navbar to switch between light and dark mode. Your theme choice is saved automatically.</p>
+      <a class="btn btn-secondary" href="{% url 'logout' %}">Log Out</a>
+    </div>
+  </section>
+</div>
+{% endblock %}

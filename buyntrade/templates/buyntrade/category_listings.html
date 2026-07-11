@@ -1,0 +1,44 @@
+{% extends "buyntrade/layout.html" %}
+
+{% block title %}{{ category.name }} — {{ site_name }}{% endblock %}
+
+{% block body %}
+<div class="shop-layout">
+  {% include "buyntrade/_shop_sidebar.html" %}
+
+  <section class="shop-main">
+    {% include "buyntrade/_shop_search.html" %}
+
+    <div class="shop-toolbar">
+      <h1 class="shop-title">{{ category.name }}</h1>
+      <a class="btn btn-secondary" href="{% url 'index' %}">Back to Shop</a>
+    </div>
+
+    {% if search_query and location_query %}
+      <p class="page-lead">Showing “{{ search_query }}” in {{ location_query }} · {{ category.name }}</p>
+    {% elif search_query %}
+      <p class="page-lead">Showing results for “{{ search_query }}” in {{ category.name }}</p>
+    {% elif location_query %}
+      <p class="page-lead">Showing listings in {{ location_query }} · {{ category.name }}</p>
+    {% endif %}
+
+    {% if listings_data %}
+      <div class="product-grid" id="product-grid">
+        {% for item in listings_data %}
+          {% include "buyntrade/_listing_card.html" %}
+        {% endfor %}
+      </div>
+      {% include "buyntrade/_pagination.html" %}
+      <div class="empty-state" id="no-results" hidden>No listings match your filters.</div>
+    {% else %}
+      <div class="empty-state">
+        {% if search_query or location_query %}
+          No listings found{% if search_query %} for “{{ search_query }}”{% endif %}{% if location_query %} in {{ location_query }}{% endif %} in this category.
+        {% else %}
+          No items for sale in this category.
+        {% endif %}
+      </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

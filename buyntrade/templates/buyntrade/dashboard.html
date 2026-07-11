@@ -1,0 +1,42 @@
+{% extends "buyntrade/layout.html" %}
+
+{% block title %}Dashboard — {{ site_name }}{% endblock %}
+
+{% block body %}
+<div class="shop-layout">
+  {% include "buyntrade/_shop_sidebar.html" %}
+
+  <section class="shop-main">
+    <div class="shop-toolbar">
+      <h1 class="shop-title">Dashboard</h1>
+    </div>
+
+    <div class="dashboard-stats">
+      <a class="stat-card stat-card-link" href="{% url 'my_listings' %}">
+        <p class="stat-label">Items for Sale</p>
+        <p class="stat-value">{{ active_listings_count }}</p>
+      </a>
+      <a class="stat-card stat-card-link" href="{% url 'watchlist' %}">
+        <p class="stat-label">Favorites</p>
+        <p class="stat-value">{{ watchlist_count }}</p>
+      </a>
+      <div class="stat-card">
+        <p class="stat-label">Bids Placed</p>
+        <p class="stat-value">{{ bids_count }}</p>
+      </div>
+      <a class="stat-card stat-card-link" href="{% url 'orders' %}">
+        <p class="stat-label">Won Items</p>
+        <p class="stat-value">{{ won_count }}</p>
+      </a>
+    </div>
+
+    <div class="panel panel-wide dashboard-panel">
+      <h2 class="section-title">Quick Actions</h2>
+      <div class="dashboard-actions">
+        <a class="btn btn-cart" href="{% url 'create' %}">Sell</a>
+        <a class="btn btn-secondary" href="{% url 'my_listings' %}">My Listings</a>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

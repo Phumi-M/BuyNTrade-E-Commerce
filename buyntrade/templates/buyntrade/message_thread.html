@@ -1,0 +1,41 @@
+{% extends "buyntrade/layout.html" %}
+
+{% block title %}Message with {{ other_user.username }} — {{ site_name }}{% endblock %}
+
+{% block body %}
+<div class="shop-layout">
+  {% include "buyntrade/_shop_sidebar.html" %}
+
+  <section class="shop-main">
+    <div class="shop-toolbar">
+      <div>
+        <a class="btn btn-secondary" href="{% url 'messages' %}">Back to Inbox</a>
+        <h1 class="shop-title">{{ other_user.username }}</h1>
+        <p class="page-lead">
+          About <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="thread-panel panel panel-wide">
+      <div class="thread-messages">
+        {% for message in thread_messages %}
+          <div class="thread-message{% if message.sender == user %} thread-message-sent{% else %} thread-message-received{% endif %}">
+            <p class="thread-message-meta">
+              <strong>{{ message.sender.username }}</strong>
+              · {{ message.created_at|date:"M j, g:i A" }}
+            </p>
+            <p class="thread-message-text">{{ message.text }}</p>
+          </div>
+        {% endfor %}
+      </div>
+
+      <form method="post" class="thread-reply-form">
+        {% csrf_token %}
+        <textarea class="form-control" name="text" rows="3" placeholder="Write a reply..." required></textarea>
+        <button type="submit" class="btn btn-primary">Send Reply</button>
+      </form>
+    </div>
+  </section>
+</div>
+{% endblock %}

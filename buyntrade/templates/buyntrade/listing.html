@@ -1,0 +1,146 @@
+{% extends "buyntrade/layout.html" %}
+{% load static %}
+
+{% block title %}{{ listing.title }} — {{ site_name }}{% endblock %}
+
+{% block body %}
+<div class="panel panel-wide">
+  <h1 class="page-heading">{{ listing.title }}</h1>
+  <p class="page-lead">
+    {% if listing.category %}{{ listing.category.name }} · {% endif %}
+    {% if listing.brand %}{{ listing.brand }} · {% endif %}
+    {% if listing.area %}{{ listing.area }} · {% endif %}
+    {% if listing.active %}{{ listing.time_left_label }}{% else %}Closed listing{% endif %}
+  </p>
+
+  <div class="listing-detail">
+    <div class="listing-detail-media-wrap">
+      {% include "buyntrade/_listing_gallery.html" %}
+    </div>
+
+    <div class="listing-detail-panel">
+      <p class="detail-price">
+        R{% if highest_bid %}{{ highest_bid.amount }}{% else %}{{ listing.starting_bid }}{% endif %},00
+      </p>
+
+      <div class="detail-row">
+        <span class="detail-label">Description</span>
+        <span class="detail-value">{{ listing.description }}</span>
+      </div>
+
+      {% if highest_bid %}
+      <div class="detail-row">
+        <span class="detail-label">Highest Bidder</span>
+        <span class="detail-value">{{ highest_bid.bidder.username }}</span>
+      </div>
+      {% endif %}
+
+      <div class="detail-row">
+        <span class="detail-label">Ends</span>
+        <span class="detail-value">
+          {% if listing.ends_at %}
+            {{ listing.ends_at|date:"M j, Y g:i A" }} ({{ listing.time_left_label }})
+          {% else %}
+            Not set
+          {% endif %}
+        </span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Location</span>
+        <span class="detail-value">
+          {% if listing.area %}
+            {{ listing.area }}
+          {% else %}
+            Not specified
+          {% endif %}
+        </span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Seller</span>
+        <span class="detail-value">
+          <a href="{% url 'seller_profile' listing.owner.username %}">{{ listing.owner.username }}</a>
+          · {{ listing.owner.seller_rating_display }}
+        </span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Category</span>
+        <span class="detail-value">
+          {% if listing.category %}{{ listing.category.name }}{% else %}None{% endif %}
+        </span>
+      </div>
+
+      {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'toggle_watchlist' listing.id %}" class="listing-form">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-secondary">
+            {% if is_in_watchlist %}Remove from Favorites{% else %}Add to Favorites{% endif %}
+          </button>
+        </form>
+
+        {% if listing.active and user != listing.owner %}
+        <form method="POST" action="{% url 'place_bid' listing.id %}" class="listing-form">
+          {% csrf_token %}
+          <input class="form-control" type="number" name="bid_amount" placeholder="Your bid" step="1"
+                 min="{% if highest_bid %}{{ highest_bid.amount|add:1 }}{% else %}{{ listing.starting_bid }}{% endif %}">
+          <button type="submit" class="btn btn-primary">Place Bid</button>
+          {% if error %}
+          <p class="alert alert-error">{{ error }}</p>
+          {% endif %}
+        </form>
+        {% endif %}
+
+        {% if user == listing.owner and listing.active %}
+        <form method="POST" action="{% url 'close_listing' listing.id %}" class="listing-form">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Close Listing</button>
+        </form>
+        {% endif %}
+
+        {% if user != listing.owner %}
+        <form method="POST" action="{% url 'send_message' listing.id %}" class="listing-form">
+          {% csrf_token %}
+          <label class="form-label" for="seller-message">Message Seller</label>
+          <textarea class="form-control" id="seller-message" name="text" placeholder="Ask about shipping, condition, or pickup..." rows="3" required></textarea>
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+        {% endif %}
+
+        <form method="POST" action="{% url 'add_comment' listing.id %}" class="listing-form">
+          {% csrf_token %}
+          <textarea class="form-control" name="comment" placeholder="Add a comment" rows="3"></textarea>
+          <button type="submit" class="btn btn-secondary">Comment</button>
+        </form>
+      {% endif %}
+
+      {% if not listing.active %}
+      <p class="listing-closed">
+        Listing closed.
+        {% if won_listing %}You won this listing!{% endif %}
+      </p>
+      {% endif %}
+    </div>
+  </div>
+
+  {% include "buyntrade/_recommendations.html" %}
+
+  <section class="section" style="margin-top: 2rem; margin-bottom: 0;">
+    <h2 class="section-title">Comments</h2>
+    {% if comments %}
+      <ul class="comments-list">
+        {% for comment in comments %}
+          <li><strong>{{ comment.commenter.username }}:</strong> {{ comment.text }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="empty-state">No comments yet.</div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'buyntrade/gallery.js' %}" defer></script>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends "buyntrade/layout.html" %}
+
+{% block title %}Help — {{ site_name }}{% endblock %}
+
+{% block body %}
+<div class="info-layout">
+  <aside class="info-sidebar panel">
+    <h2 class="info-sidebar-title">Help</h2>
+    <nav class="info-nav">
+      <a href="#support-center">Support Center</a>
+      <a href="#safety-tips">Safety Tips</a>
+      <a href="#buying-guide">Buying Guide</a>
+      <a href="#selling-guide">Selling Guide</a>
+    </nav>
+  </aside>
+
+  <article class="info-content panel panel-wide">
+    <header class="info-header">
+      <h1 class="page-heading">Help Center</h1>
+      <p class="page-lead">Everything you need to buy and sell safely on BuyNTrade.</p>
+    </header>
+
+    <section id="support-center" class="info-section">
+      <h2>Support Center</h2>
+      <p>Need help with your account, a listing, or a bid? Our support resources are here to guide you.</p>
+      <ul class="info-list">
+        <li><strong>Account issues:</strong> Problems logging in, registering, or updating your profile.</li>
+        <li><strong>Listing help:</strong> Selling items, adding images, choosing a category, or closing a sale.</li>
+        <li><strong>Bidding help:</strong> Understanding current prices, minimum bids, and favorites.</li>
+        <li><strong>Community:</strong> Questions about spotlight posts, comments, or platform behaviour.</li>
+      </ul>
+      <p>Email us at <a href="mailto:support@buyntrade.co.za">support@buyntrade.co.za</a> and include your username, listing link (if relevant), and a clear description of the issue. We aim to respond within 1–2 business days.</p>
+    </section>
+
+    <section id="safety-tips" class="info-section">
+      <h2>Safety Tips</h2>
+      <p>Your safety matters. Follow these guidelines when buying or selling on BuyNTrade:</p>
+      <ul class="info-list">
+        <li>Meet in public, well-lit places when exchanging items in person.</li>
+        <li>Never share passwords, banking PINs, or one-time codes with other users.</li>
+        <li>Inspect items carefully before completing a trade or payment.</li>
+        <li>Use traceable payment methods when possible and keep receipts.</li>
+        <li>Be cautious of deals that seem too good to be true or users who rush you.</li>
+        <li>Report suspicious listings or behaviour to <a href="mailto:support@buyntrade.co.za">support@buyntrade.co.za</a>.</li>
+      </ul>
+      <p>BuyNTrade facilitates connections between users but does not handle physical delivery or payment processing directly. Always use your best judgement.</p>
+    </section>
+
+    <section id="buying-guide" class="info-section">
+      <h2>Buying Guide</h2>
+      <p>Ready to find your next deal? Here is how to buy successfully on BuyNTrade:</p>
+      <ol class="info-steps">
+        <li>
+          <strong>Search and browse the shop</strong>
+          <p>Use search, category filters on the shop page, or recommendations to find items you want.</p>
+        </li>
+        <li>
+          <strong>Review the listing</strong>
+          <p>Read the description, check the image, note the starting bid, and see whether bids have already been placed.</p>
+        </li>
+        <li>
+          <strong>Place a competitive bid</strong>
+          <p>Your bid must be at least the starting price and higher than any existing bid. You can ask questions in the comments first.</p>
+        </li>
+        <li>
+          <strong>Save to Favorites</strong>
+          <p>Save items you are interested in so you can return to them quickly from Favorites in the navbar.</p>
+        </li>
+        <li>
+          <strong>Win and arrange collection</strong>
+          <p>If you are the highest bidder when the seller closes the listing, coordinate pickup or delivery safely with the seller.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section id="selling-guide" class="info-section">
+      <h2>Selling Guide</h2>
+      <p>Selling on BuyNTrade is straightforward. Tap <strong>Sell</strong> in the navbar and follow these steps for the best results:</p>
+      <ol class="info-steps">
+        <li>
+          <strong>Create a clear title</strong>
+          <p>Use specific names like “Samsung 55-inch TV” instead of vague titles like “TV for sale.”</p>
+        </li>
+        <li>
+          <strong>Write an honest description</strong>
+          <p>Include condition, age, defects, and anything else a buyer should know upfront.</p>
+        </li>
+        <li>
+          <strong>Set a fair starting bid</strong>
+          <p>Price competitively to attract early interest while leaving room for bidding.</p>
+        </li>
+        <li>
+          <strong>Add clear photos</strong>
+          <p>Upload up to 8 photos directly when you sell. Listings with good images get more bids.</p>
+        </li>
+        <li>
+          <strong>Choose the right category</strong>
+          <p>Help buyers find your item faster by selecting the most relevant category.</p>
+        </li>
+        <li>
+          <strong>Respond and close</strong>
+          <p>Answer comments promptly. When you are ready to sell, close the listing so the highest bidder wins.</p>
+        </li>
+      </ol>
+    </section>
+  </article>
+</div>
+{% endblock %}

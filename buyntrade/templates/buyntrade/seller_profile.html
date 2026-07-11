@@ -1,0 +1,137 @@
+{% extends "buyntrade/layout.html" %}
+
+{% block title %}{{ seller.username }} — {{ site_name }}{% endblock %}
+
+{% block body %}
+<div class="shop-layout">
+  {% include "buyntrade/_shop_sidebar.html" %}
+
+  <section class="shop-main">
+    <div class="seller-profile-header panel panel-wide">
+      <div class="seller-profile-top">
+        {% if seller.get_profile_photo_url %}
+          <img class="seller-profile-photo" src="{{ seller.get_profile_photo_url }}" alt="{{ seller.username }} profile photo">
+        {% else %}
+          <span class="seller-avatar seller-avatar-lg">{{ seller.profile_initial }}</span>
+        {% endif %}
+        <div class="seller-profile-intro">
+          <h1 class="page-heading">{{ seller.username }}</h1>
+          <p class="page-lead seller-join-date">Joined {{ seller.date_joined|date:"F j, Y" }}</p>
+          {% if seller.bio %}
+            <p class="seller-bio">{{ seller.bio }}</p>
+          {% else %}
+            <p class="seller-bio seller-bio-empty">This seller hasn't added a bio yet.</p>
+          {% endif %}
+          {% if user.is_authenticated and user == seller %}
+            <a class="btn btn-secondary btn-sm seller-edit-profile" href="{% url 'settings' %}">Edit Profile</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="seller-stats seller-stats-profile">
+        <div class="stat-card">
+          <p class="stat-label">Listings</p>
+          <p class="stat-value">{{ total_listings_count }}</p>
+          <p class="form-hint">{{ active_listings_count }} active now</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Products Sold</p>
+          <p class="stat-value">{{ completed_sales }}</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Average Rating</p>
+          <p class="stat-value">
+            {% if rating_stats.count %}
+              {{ rating_stats.average|floatformat:1 }} / 5
+            {% else %}
+              —
+            {% endif %}
+          </p>
+          <p class="form-hint">
+            {% if rating_stats.count %}
+              {{ rating_stats.count }} review{{ rating_stats.count|pluralize }}
+            {% else %}
+              No ratings yet
+            {% endif %}
+          </p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Member Since</p>
+          <p class="stat-value stat-value-text">{{ seller.date_joined|date:"M Y" }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-toolbar">
+      <h2 class="shop-title">For Sale</h2>
+    </div>
+
+    {% if listings_data %}
+      <div class="product-grid">
+        {% for item in listings_data %}
+          {% include "buyntrade/_listing_card.html" %}
+        {% endfor %}
+      </div>
+      {% include "buyntrade/_pagination.html" %}
+    {% else %}
+      <div class="empty-state">This seller has no items for sale right now.</div>
+    {% endif %}
+
+    <section class="seller-reviews-section panel panel-wide">
+      <h2 class="section-title">Buyer Reviews</h2>
+      {% if reviews %}
+        <ul class="seller-reviews-list">
+          {% for review in reviews %}
+            <li class="seller-review-item">
+              <div class="seller-review-meta">
+                <strong>{{ review.reviewer.username }}</strong>
+                · {{ review.rating }}/5
+                · {{ review.listing.title }}
+                · {{ review.created_at|timesince }} ago
+              </div>
+              {% if review.comment %}
+                <p class="seller-review-text">{{ review.comment }}</p>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="page-lead">No reviews yet.</p>
+      {% endif %}
+    </section>
+
+    {% if reviewable_listings %}
+      <section class="panel panel-wide">
+        <h2 class="section-title">Leave a Review</h2>
+        <p class="page-lead">You won a listing from this seller. Share your experience to help other buyers.</p>
+        <form method="post" action="{% url 'add_seller_review' seller.username %}" class="form-stack">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="listing_id">Listing</label>
+            <select class="form-control" name="listing_id" id="listing_id" required>
+              {% for listing in reviewable_listings %}
+                <option value="{{ listing.id }}">{{ listing.title }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="rating">Rating</label>
+            <select class="form-control" name="rating" id="rating" required>
+              <option value="5">5 - Excellent</option>
+              <option value="4">4 - Good</option>
+              <option value="3">3 - Average</option>
+              <option value="2">2 - Poor</option>
+              <option value="1">1 - Bad</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="comment">Comment (optional)</label>
+            <textarea class="form-control" name="comment" id="comment" rows="3" placeholder="How was your experience?"></textarea>
+          </div>
+          <button class="btn btn-primary" type="submit">Submit Review</button>
+        </form>
+      </section>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path("", views.index, name="index"),
+    path("login", views.login_view, name="login"),
+    path("logout", views.logout_view, name="logout"),
+    path("register", views.register, name="register"),
+    path("create", views.create_listing, name="create"),
+    path("my-listings/", views.my_listings_view, name="my_listings"),
+    path("listing/<int:listing_id>/edit", views.edit_listing, name="edit_listing"),
+    path("listing/<int:listing_id>", views.listing_view, name="listing"),
+    path("listing/<int:listing_id>/watchlist", views.toggle_watchlist, name="toggle_watchlist"),
+    path("listing/<int:listing_id>/bid", views.place_bid, name="place_bid"),
+    path("listing/<int:listing_id>/close", views.close_listing, name="close_listing"),
+    path("listing/<int:listing_id>/comment", views.add_comment, name="add_comment"),
+    path("categories", views.categories_view, name="categories"),
+    path("categories/<int:category_id>", views.category_listings_view, name="category_listings"),
+    path("watchlist", views.watchlist_view, name="watchlist"),
+    path("community", views.community_view, name="community"),
+    path("community/<int:post_id>/like", views.like_community_post, name="like_community_post"),
+    path("about/", views.about_view, name="about"),
+    path("help/", views.help_view, name="help"),
+    path("terms/", views.terms_view, name="terms"),
+    path("dashboard/", views.dashboard_view, name="dashboard"),
+    path("orders/", views.orders_view, name="orders"),
+    path("messages/", views.messages_view, name="messages"),
+    path("messages/listing/<int:listing_id>/with/<str:username>/", views.message_thread_view, name="message_thread"),
+    path("listing/<int:listing_id>/message", views.send_message, name="send_message"),
+    path("settings/", views.settings_view, name="settings"),
+    path("seller/<str:username>/", views.seller_profile_view, name="seller_profile"),
+    path("seller/<str:username>/review", views.add_seller_review, name="add_seller_review"),
+]

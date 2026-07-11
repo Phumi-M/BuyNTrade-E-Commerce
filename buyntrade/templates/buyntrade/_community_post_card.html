@@ -1,0 +1,34 @@
+<article class="spotlight-card">
+  <div class="spotlight-user">
+    <span class="spotlight-avatar" aria-hidden="true">{{ post.initial }}</span>
+    <div>
+      <p class="spotlight-name">{{ post.author_name }}</p>
+      <p class="spotlight-role">{{ post.role }}</p>
+    </div>
+  </div>
+  <p class="spotlight-text">{{ post.text }}</p>
+  <div class="spotlight-meta">
+    <span>{{ post.time_label }}</span>
+    {% if user.is_authenticated %}
+      <form method="POST" action="{% url 'like_community_post' post.id %}" class="spotlight-like-form">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.path }}">
+        <button type="submit" class="spotlight-like-btn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 10v12"></path>
+            <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"></path>
+          </svg>
+          {{ post.likes }}
+        </button>
+      </form>
+    {% else %}
+      <span class="spotlight-likes">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M7 10v12"></path>
+          <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"></path>
+        </svg>
+        {{ post.likes }}
+      </span>
+    {% endif %}
+  </div>
+</article>

@@ -1,0 +1,72 @@
+{% extends "buyntrade/layout.html" %}
+
+{% block title %}Shop — {{ site_name }}{% endblock %}
+
+{% block body %}
+<div class="shop-layout">
+  {% include "buyntrade/_shop_sidebar.html" %}
+
+  <section class="shop-main">
+    <div class="shop-hero">
+      <p class="shop-hero-eyebrow">Local buy &amp; trade</p>
+      <h1 class="shop-hero-title">Find great deals near you</h1>
+      <p class="shop-hero-lead">Browse live auctions, bid on items in your area, and connect with trusted local sellers.</p>
+    </div>
+
+    {% include "buyntrade/_shop_search.html" %}
+
+    {% if recommendations %}
+      {% include "buyntrade/_recommendations.html" with recommendations_title="Recommended for you" recommendations_lead="Picked from items you've viewed and similar listings." %}
+    {% endif %}
+
+    <div class="shop-toolbar">
+      <h2 class="shop-title">All Items</h2>
+      <div class="shop-controls">
+        <select id="filter-select" class="shop-select" aria-label="Price filter">
+          <option value="all">All prices</option>
+          <option value="under-100">Under R100</option>
+          <option value="under-500">Under R500</option>
+        </select>
+        <select id="sort-select" class="shop-select" aria-label="Sort by">
+          <option value="default">Sort by</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="name-asc">Name: A to Z</option>
+        </select>
+      </div>
+    </div>
+
+    {% if search_query and location_query %}
+      <p class="page-lead">Showing “{{ search_query }}” in {{ location_query }}</p>
+    {% elif search_query %}
+      <p class="page-lead">Showing results for “{{ search_query }}”</p>
+    {% elif location_query %}
+      <p class="page-lead">Showing listings in {{ location_query }}</p>
+    {% endif %}
+
+    {% if listings_data %}
+      <div class="product-grid" id="product-grid">
+        {% for item in listings_data %}
+          {% include "buyntrade/_listing_card.html" %}
+        {% endfor %}
+      </div>
+      {% include "buyntrade/_pagination.html" %}
+      <div class="empty-state" id="no-results" hidden>No listings match your filters.</div>
+    {% else %}
+      <div class="empty-state">
+        {% if search_query or location_query %}
+          <p>No listings found{% if search_query %} for “{{ search_query }}”{% endif %}{% if location_query %} in {{ location_query }}{% endif %}.</p>
+          <a class="btn btn-cart" href="{% url 'index' %}">Clear search</a>
+        {% else %}
+          <p>No items for sale yet. Be the first to sell something.</p>
+          <a class="btn btn-cart" href="{% url 'create' %}">Sell</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </section>
+</div>
+
+<section id="community-spotlight" class="shop-community">
+  {% include "buyntrade/_community_spotlight.html" %}
+</section>
+{% endblock %}

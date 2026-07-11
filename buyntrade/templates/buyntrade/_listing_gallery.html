@@ -1,0 +1,55 @@
+{% if gallery_images %}
+<div class="product-gallery" data-gallery>
+  <div class="gallery-main" data-gallery-main>
+    <img
+      src="{{ gallery_images.0.image.url }}"
+      alt="{{ listing.title }}"
+      data-gallery-image
+      id="gallery-main-image"
+    >
+    <span class="gallery-zoom-hint">Hover to zoom</span>
+  </div>
+  {% if gallery_images|length > 1 %}
+  <div class="gallery-thumbs" data-gallery-thumbs role="tablist" aria-label="Product images">
+    {% for photo in gallery_images %}
+    <button
+      type="button"
+      class="gallery-thumb{% if forloop.first %} is-active{% endif %}"
+      data-gallery-src="{{ photo.image.url }}"
+      aria-label="View image {{ forloop.counter }}"
+      aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+    >
+      <img src="{{ photo.image.url }}" alt="">
+    </button>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% elif listing.has_video %}
+<div class="listing-detail-media listing-detail-media-video">
+  <video class="listing-video" autoplay loop muted playsinline controls
+         {% if listing.get_display_image_url %}poster="{{ listing.get_display_image_url }}"{% endif %}>
+    <source src="{{ listing.video.url }}">
+  </video>
+  <p class="video-caption">5-second loop showing the item in working condition.</p>
+</div>
+{% elif listing.get_display_image_url %}
+<div class="listing-detail-media">
+  <img src="{{ listing.get_display_image_url }}" alt="{{ listing.title }}">
+</div>
+{% else %}
+<div class="listing-detail-media">
+  <div class="listing-card-placeholder">No image available</div>
+</div>
+{% endif %}
+
+{% if gallery_images and listing.has_video %}
+<div class="listing-video-block">
+  <h3 class="section-title">Product Video</h3>
+  <video class="listing-video" autoplay loop muted playsinline controls
+         {% if gallery_images.0.image.url %}poster="{{ gallery_images.0.image.url }}"{% endif %}>
+    <source src="{{ listing.video.url }}">
+  </video>
+  <p class="video-caption">5-second loop showing the item in working condition.</p>
+</div>
+{% endif %}

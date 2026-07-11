@@ -1,0 +1,25 @@
+{% extends "buyntrade/layout.html" %}
+
+{% block title %}Community — {{ site_name }}{% endblock %}
+
+{% block body %}
+<section class="section">
+  <div class="section-header">
+    <div>
+      <h1 class="page-heading">Community Spotlight</h1>
+      <p class="page-lead">Stories and feedback from the BuyNTrade community.</p>
+    </div>
+    <a class="btn btn-secondary" href="{% url 'index' %}">Back to Home</a>
+  </div>
+
+  {% if community_posts %}
+    <div class="spotlight-grid community-page-grid">
+      {% for post in community_posts %}
+        {% include "buyntrade/_community_post_card.html" %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">No community posts yet.</div>
+  {% endif %}
+</section>
+{% endblock %}

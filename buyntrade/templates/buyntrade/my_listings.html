@@ -1,0 +1,79 @@
+{% extends "buyntrade/layout.html" %}
+
+{% block title %}My Listings — {{ site_name }}{% endblock %}
+
+{% block body %}
+<div class="shop-layout">
+  {% include "buyntrade/_shop_sidebar.html" %}
+
+  <section class="shop-main">
+    <div class="shop-toolbar">
+      <div>
+        <h1 class="shop-title">My Listings</h1>
+        <p class="page-lead">Everything you're selling — edit details or close auctions from one place.</p>
+      </div>
+      <a class="btn btn-cart" href="{% url 'create' %}">Sell</a>
+    </div>
+
+    {% if listing_rows %}
+      <div class="my-listings-table-wrap panel panel-wide">
+        <table class="my-listings-table">
+          <thead>
+            <tr>
+              <th>Listing</th>
+              <th>Area</th>
+              <th>Price</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in listing_rows %}
+              {% with listing=row.listing highest_bid=row.highest_bid %}
+              <tr>
+                <td>
+                  <a class="my-listing-title" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                  {% if listing.category %}
+                    <span class="my-listing-meta">{{ listing.category.name }}</span>
+                  {% endif %}
+                </td>
+                <td>{{ listing.area|default:"—" }}</td>
+                <td>R{% if highest_bid %}{{ highest_bid.amount }}{% else %}{{ listing.starting_bid }}{% endif %},00</td>
+                <td>
+                  {% if listing.active %}
+                    <span class="status-badge status-live">{{ listing.time_left_label }}</span>
+                  {% else %}
+                    <span class="status-badge status-closed">Closed</span>
+                    {% if listing.winner %}
+                      <span class="my-listing-meta">Sold to {{ listing.winner.username }}</span>
+                    {% endif %}
+                  {% endif %}
+                </td>
+                <td>
+                  <div class="my-listing-actions">
+                    <a class="btn btn-secondary btn-sm" href="{% url 'listing' listing.id %}">View</a>
+                    {% if listing.active %}
+                      <a class="btn btn-secondary btn-sm" href="{% url 'edit_listing' listing.id %}">Edit</a>
+                      <form method="post" action="{% url 'close_listing' listing.id %}" class="inline-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="my_listings">
+                        <button type="submit" class="btn btn-danger btn-sm">Close</button>
+                      </form>
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+              {% endwith %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <p>You haven't listed anything yet.</p>
+        <a class="btn btn-cart" href="{% url 'create' %}">Sell your first item</a>
+      </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

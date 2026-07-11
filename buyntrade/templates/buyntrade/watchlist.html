@@ -1,0 +1,29 @@
+{% extends "buyntrade/layout.html" %}
+
+{% block title %}Favorites — {{ site_name }}{% endblock %}
+
+{% block body %}
+<div class="shop-layout">
+  {% include "buyntrade/_shop_sidebar.html" %}
+
+  <section class="shop-main">
+    <div class="shop-toolbar">
+      <div>
+        <h1 class="shop-title">Favorites</h1>
+        <p class="page-lead">Items you've saved while browsing the shop</p>
+      </div>
+    </div>
+
+    {% if listings_data %}
+      <div class="product-grid">
+        {% for item in listings_data %}
+          {% include "buyntrade/_listing_card.html" %}
+        {% endfor %}
+      </div>
+      {% include "buyntrade/_pagination.html" %}
+    {% else %}
+      <div class="empty-state">Your favorites list is empty. <a href="{% url 'index' %}">Browse the shop</a> to find items you like.</div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

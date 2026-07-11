@@ -1,0 +1,33 @@
+<form method="get" action="{{ search_action }}" class="search-filter search-filter-top">
+  <div class="search-field">
+    <label class="search-label" for="search-item">Item</label>
+    <input
+      type="search"
+      name="q"
+      id="search-item"
+      class="search-input"
+      placeholder="Search items..."
+      aria-label="Search items"
+      value="{{ search_query }}"
+    >
+  </div>
+  <div class="search-field">
+    <label class="search-label" for="search-location">Location</label>
+    <input
+      type="search"
+      name="location"
+      id="search-location"
+      class="search-input search-input-location"
+      placeholder="City or area..."
+      aria-label="Search location"
+      list="search-area-suggestions"
+      value="{{ location_query }}"
+    >
+    <datalist id="search-area-suggestions">
+      {% for area in popular_areas %}
+        <option value="{{ area }}"></option>
+      {% endfor %}
+    </datalist>
+  </div>
+  <button type="submit" class="btn btn-search">Search</button>
+</form>

@@ -1,0 +1,22 @@
+{% if user.is_authenticated %}
+<div class="filter-block sidebar-menu-block">
+  <h3 class="filter-heading">Account</h3>
+  <ul class="filter-links sidebar-menu">
+    <li>
+      <a href="{% url 'dashboard' %}" class="sidebar-link{% if active_sidebar == 'dashboard' %} active{% endif %}">Dashboard</a>
+    </li>
+    <li>
+      <a href="{% url 'my_listings' %}" class="sidebar-link{% if active_sidebar == 'my_listings' %} active{% endif %}">My Listings</a>
+    </li>
+    <li>
+      <a href="{% url 'orders' %}" class="sidebar-link{% if active_sidebar == 'orders' %} active{% endif %}">Orders</a>
+    </li>
+    <li>
+      <a href="{% url 'messages' %}" class="sidebar-link{% if active_sidebar == 'messages' %} active{% endif %}">Messages</a>
+    </li>
+    <li>
+      <a href="{% url 'settings' %}" class="sidebar-link{% if active_sidebar == 'settings' %} active{% endif %}">Settings</a>
+    </li>
+  </ul>
+</div>
+{% endif %}

@@ -1,0 +1,71 @@
+{% extends "buyntrade/layout.html" %}
+
+{% block title %}About — {{ site_name }}{% endblock %}
+
+{% block body %}
+<div class="info-layout">
+  <aside class="info-sidebar panel">
+    <h2 class="info-sidebar-title">About</h2>
+    <nav class="info-nav">
+      <a href="#our-story">Our Story</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#careers">Careers</a>
+      <a href="#press">Press</a>
+    </nav>
+  </aside>
+
+  <article class="info-content panel panel-wide">
+    <header class="info-header">
+      <h1 class="page-heading">About BuyNTrade</h1>
+      <p class="page-lead">A modern marketplace for buying, selling, and trading with people in your community.</p>
+    </header>
+
+    <section id="our-story" class="info-section">
+      <h2>Our Story</h2>
+      <p>BuyNTrade was built to make local commerce simple, transparent, and trustworthy. We noticed that many people wanted a better way to sell items they no longer needed, find great deals nearby, and even trade goods without complicated middlemen.</p>
+      <p>What started as a student e-commerce project has grown into a platform where users can sell products, place bids, save favorites, and connect through a vibrant community. Whether you are in Johannesburg, Brakpan, Cape Town, or anywhere in South Africa, BuyNTrade helps you turn unused items into value.</p>
+      <p>Our mission is to empower everyday buyers and sellers with tools that feel modern, fast, and fair — from smart search to community spotlight stories that celebrate real trades.</p>
+    </section>
+
+    <section id="how-it-works" class="info-section">
+      <h2>How It Works</h2>
+      <ol class="info-steps">
+        <li>
+          <strong>Create an account</strong>
+          <p>Register for free to browse the shop, place bids, and save items to your favorites.</p>
+        </li>
+        <li>
+          <strong>Shop or sell</strong>
+          <p>Sellers use <strong>Sell</strong> to list items with a title, description, starting bid, photos, and category. Buyers browse the shop homepage or filter by category in the sidebar.</p>
+        </li>
+        <li>
+          <strong>Place bids</strong>
+          <p>Found something you want? Submit a bid higher than the current price. The listing page shows the highest bid and bidder in real time.</p>
+        </li>
+        <li>
+          <strong>Save and comment</strong>
+          <p>Add items to Favorites to track them easily. Ask questions or share feedback through listing comments.</p>
+        </li>
+        <li>
+          <strong>Close and win</strong>
+          <p>When a seller closes a listing, the highest bidder wins. Both parties can then arrange safe pickup or delivery offline.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section id="careers" class="info-section">
+      <h2>Careers</h2>
+      <p>BuyNTrade is growing, and we are always interested in people who care about marketplaces, community products, and great user experiences.</p>
+      <p>We look for talent in engineering, design, customer support, and community operations. Even as a learning project, BuyNTrade reflects real-world skills in Django, UI design, and product thinking.</p>
+      <p>To express interest, send your CV and a short note about why you want to join BuyNTrade to <a href="mailto:careers@buyntrade.co.za">careers@buyntrade.co.za</a>. We review applications on a rolling basis.</p>
+    </section>
+
+    <section id="press" class="info-section">
+      <h2>Press</h2>
+      <p>For media enquiries, brand assets, or interview requests, contact our press team at <a href="mailto:press@buyntrade.co.za">press@buyntrade.co.za</a>.</p>
+      <p>BuyNTrade is an e-commerce platform focused on listings, bidding, and community-driven trade. We welcome coverage of our approach to local marketplaces, student-built products, and user-first design.</p>
+      <p>Please include your publication name, deadline, and the topic you would like to discuss so we can respond quickly.</p>
+    </section>
+  </article>
+</div>
+{% endblock %}

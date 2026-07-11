@@ -1,0 +1,33 @@
+{% extends "buyntrade/layout.html" %}
+
+{% block title %}Orders — {{ site_name }}{% endblock %}
+
+{% block body %}
+<div class="shop-layout">
+  {% include "buyntrade/_shop_sidebar.html" %}
+
+  <section class="shop-main">
+    <div class="shop-toolbar">
+      <div>
+        <h1 class="shop-title">Orders</h1>
+        <p class="page-lead">Items you've won through auctions.</p>
+      </div>
+    </div>
+
+    <div class="panel panel-wide">
+      {% if purchases %}
+        <ul class="info-list order-list">
+          {% for listing in purchases %}
+            <li>
+              <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+              — Won{% if listing.area %} · {{ listing.area }}{% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="page-lead">No orders yet. <a href="{% url 'index' %}">Browse the shop</a> and place a bid on something you like.</p>
+      {% endif %}
+    </div>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+<section class="section community-spotlight">
+  <div class="section-header">
+    <h2 class="section-title">Community Spotlight</h2>
+    <a class="section-link" href="{% url 'community' %}">See all</a>
+  </div>
+
+  {% if spotlight_posts %}
+    <div class="spotlight-grid">
+      {% for post in spotlight_posts %}
+        {% include "buyntrade/_community_post_card.html" %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">No community posts yet.</div>
+  {% endif %}
+</section>

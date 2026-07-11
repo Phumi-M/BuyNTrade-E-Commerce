@@ -1,0 +1,99 @@
+{% extends "buyntrade/layout.html" %}
+{% load static %}
+
+{% block title %}Sell — {{ site_name }}{% endblock %}
+
+{% block body %}
+<div class="panel panel-wide">
+  <h1 class="page-heading">Sell an Item</h1>
+  <p class="page-lead">Upload multiple photos and an optional 5-second video loop to show buyers your item works.</p>
+
+  {% if errors %}
+    <div class="alert alert-error">
+      {% for error in errors %}
+        <p>{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form action="{% url 'create' %}" method="post" enctype="multipart/form-data" class="form-stack" id="create-listing-form">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input class="form-control" type="text" name="title" id="title" required value="{{ form_data.title|default:'' }}">
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea class="form-control" name="description" id="description" required>{{ form_data.description|default:'' }}</textarea>
+    </div>
+    <div class="form-group">
+      <label for="starting_bid">Starting Bid</label>
+      <input class="form-control" type="number" name="starting_bid" id="starting_bid" step="1" min="1" required value="{{ form_data.starting_bid|default:'' }}">
+    </div>
+    <div class="form-group">
+      <label for="brand">Brand (optional)</label>
+      <input class="form-control" type="text" name="brand" id="brand" placeholder="e.g. Samsung, Nike" value="{{ form_data.brand|default:'' }}">
+      <p class="form-hint">Helps buyers find similar items and improves recommendations.</p>
+    </div>
+    <div class="form-group">
+      <label for="area">City / Area</label>
+      <input class="form-control" type="text" name="area" id="area" list="popular-areas" placeholder="e.g. Brakpan, Johannesburg" required value="{{ form_data.area|default:'' }}">
+      <datalist id="popular-areas">
+        {% for area in popular_areas %}
+          <option value="{{ area }}"></option>
+        {% endfor %}
+      </datalist>
+      <p class="form-hint">Where buyers can pick up or meet for local trade.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="images">Product Photos</label>
+      <input class="form-control" type="file" name="images" id="images" accept="image/*" multiple>
+      <p class="form-hint">Upload up to 8 photos (JPG, PNG, or WebP, max 5 MB each). The first photo is the cover image.</p>
+      <div class="media-preview gallery-upload-preview" id="images-preview" hidden></div>
+    </div>
+
+    <div class="form-group">
+      <label for="video">Upload Video Snippet (optional)</label>
+      <input class="form-control" type="file" name="video" id="video" accept="video/mp4,video/webm,video/quicktime">
+      <p class="form-hint">Up to 5 seconds, MP4/WebM/MOV, max 10 MB. We extract the best frame as a thumbnail.</p>
+      <input type="file" name="video_thumbnail" id="video-thumbnail-input" hidden>
+      <p class="form-hint video-status" id="video-status"></p>
+      <div class="media-preview media-preview-video" id="video-preview" hidden>
+        <video id="video-preview-player" muted loop playsinline controls></video>
+        <div class="thumbnail-preview-wrap">
+          <p class="form-hint">Auto-generated thumbnail</p>
+          <img id="video-thumbnail-preview" alt="Video thumbnail preview">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="image_url">Image URL (optional fallback)</label>
+      <input class="form-control" type="url" name="image_url" id="image_url" value="{{ form_data.image_url|default:'' }}">
+    </div>
+
+    <div class="form-group">
+      <label for="duration_days">Auction Duration</label>
+      <select class="form-control" name="duration_days" id="duration_days" required>
+        <option value="3"{% if form_data.duration_days == '3' %} selected{% endif %}>3 days</option>
+        <option value="5"{% if form_data.duration_days == '5' %} selected{% endif %}>5 days</option>
+        <option value="7"{% if not form_data.duration_days or form_data.duration_days == '7' %} selected{% endif %}>7 days</option>
+        <option value="14"{% if form_data.duration_days == '14' %} selected{% endif %}>14 days</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="category">Category (optional)</label>
+      <select class="form-control" name="category" id="category">
+        <option value="">Select category</option>
+        {% for category in categories %}
+          <option value="{{ category.id }}"{% if form_data.category == category.id|stringformat:"s" %} selected{% endif %}>{{ category.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button class="btn btn-primary" type="submit">List Item</button>
+  </form>
+</div>
+
+<script src="{% static 'buyntrade/create.js' %}" defer></script>
+{% endblock %}

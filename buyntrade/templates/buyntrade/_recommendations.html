@@ -1,0 +1,11 @@
+{% if recommendations %}
+<section class="recommendations-section">
+  <h2 class="section-title">{{ recommendations_title|default:"You may also like..." }}</h2>
+  <p class="recommendations-lead">{{ recommendations_lead|default:"Similar items based on category, price, brand, and your browsing history." }}</p>
+  <div class="product-grid recommendations-grid">
+    {% for item in recommendations %}
+      {% include "buyntrade/_listing_card.html" %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}

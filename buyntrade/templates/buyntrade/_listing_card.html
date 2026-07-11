@@ -1,0 +1,43 @@
+{% with listing=item.listing highest_bid=item.highest_bid %}
+<article
+  class="product-card"
+  data-listing-card
+  data-category-id="{% if listing.category %}{{ listing.category.id }}{% else %}0{% endif %}"
+  data-price="{% if highest_bid %}{{ highest_bid.amount }}{% else %}{{ listing.starting_bid }}{% endif %}"
+  data-title="{{ listing.title|lower }}"
+  data-search="{{ listing.title|lower }} {{ listing.description|lower }} {% if listing.category %}{{ listing.category.name|lower }}{% endif %} {% if listing.brand %}{{ listing.brand|lower }}{% endif %} {{ listing.area|lower }}"
+>
+  <div class="product-media{% if listing.has_video %} product-media-video{% endif %}">
+    {% if listing.get_display_image_url %}
+      <img src="{{ listing.get_display_image_url }}" alt="{{ listing.title }}">
+    {% else %}
+      <div class="product-placeholder">No image</div>
+    {% endif %}
+    {% if listing.has_video %}
+      <span class="media-type-badge">Video</span>
+    {% endif %}
+    {% if watchlist_ids and listing.id in watchlist_ids %}
+      <span class="favorite-badge" title="In your favorites" aria-hidden="true">♥</span>
+    {% endif %}
+    <span class="product-badge{% if not listing.active %} product-badge-closed{% endif %}">
+      {{ listing.time_left_label }}
+    </span>
+  </div>
+  <div class="product-card-body">
+    <div class="product-meta">
+      {% if listing.category %}
+        <span class="product-tag">{{ listing.category.name }}</span>
+      {% endif %}
+      {% if listing.brand %}
+        <span class="product-tag product-tag-brand">{{ listing.brand }}</span>
+      {% endif %}
+      {% if listing.area %}
+        <span class="product-location">{{ listing.area }}</span>
+      {% endif %}
+    </div>
+    <h3 class="product-title">{{ listing.title }}</h3>
+    <p class="product-price">R{% if highest_bid %}{{ highest_bid.amount }}{% else %}{{ listing.starting_bid }}{% endif %},00</p>
+    <a href="{% url 'listing' listing.id %}" class="btn btn-cart">View Item</a>
+  </div>
+</article>
+{% endwith %}
